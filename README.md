@@ -13,6 +13,8 @@ Make that HTML5, since it looks for `document.getElementsByTagName('canvas').ite
 
 ***
 
+### API
+
 The API exposes eight functions via the global `GameOfLife` object.
 
 `load(/* String */ rle)`: Initializes the game and canvas with a seed pattern extracted from the given RLE. Returns `{'grid': g, 'born': b, 'survives': s}` where 
