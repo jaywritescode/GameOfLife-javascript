@@ -42,11 +42,12 @@ var GameOfLife = (function(canvas) {
         if(isNaN(columns) || isNaN(rows) || columns < 1 || rows < 1) {
             throw new Error("Invalid RLE string.");
         }
-        if(!(rulearray = ruleRegex.exec(headerarray[2]))) {
-            throw new Error("Invalid RLE string.");
-        }
 
         if(headerarray[2]) {
+            if(!(rulearray = ruleRegex.exec(headerarray[2]))) {
+                throw new Error("Invalid RLE string.");
+            }
+            
             // parse the rule string
                     // create some temporary variables
             var i, j, a = (rulearray[2] || rulearray[7]).split('');         // rule[2] || rule[7] is the "born" part of the rule
