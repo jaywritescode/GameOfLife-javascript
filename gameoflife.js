@@ -1,6 +1,6 @@
 var T = 1, F = 0;
 
-var GameOfLife = (function(canvas) {
+GameOfLife = function(canvas) {
     var grid,
         born,
         survives,
@@ -16,6 +16,8 @@ var GameOfLife = (function(canvas) {
 
     var numberRegex = /[1-9]\d*/,
         ruleRegex = /(B([0-8]*)\/(S([0-8]*))|(([0-8]*))\/([0-8]*))/i;
+
+    var invalidRleMessage = "Invalid run-length encoding. Can't create seed pattern.";
 
     /**
      * Load a game of life from the given RLE string.
@@ -36,18 +38,24 @@ var GameOfLife = (function(canvas) {
 
         // the header line is now the first line of linearray, split it by commas
         headerarray = linearray.shift().split(/,\s*/);
-        columns = numberRegex.exec(headerarray[0])[0];
-        rows = numberRegex.exec(headerarray[1])[0];
+
+        try {
+            columns = numberRegex.exec(headerarray[0])[0];
+            rows = numberRegex.exec(headerarray[1])[0];
+        }
+        catch(e) {
+            throw new Error(invalidRleMessage);
+        }
 
         if(isNaN(columns) || isNaN(rows) || columns < 1 || rows < 1) {
-            throw new Error("Invalid RLE string.");
+            throw new Error(invalidRleMessage);
         }
 
         if(headerarray[2]) {
             if(!(rulearray = ruleRegex.exec(headerarray[2]))) {
-                throw new Error("Invalid RLE string.");
+                throw new Error(invalidRleMessage);
             }
-            
+
             // parse the rule string
                     // create some temporary variables
             var i, j, a = (rulearray[2] || rulearray[7]).split('');         // rule[2] || rule[7] is the "born" part of the rule
@@ -286,7 +294,6 @@ var GameOfLife = (function(canvas) {
     function _draw_grid() {
         var context, m = magnify || 1;
         if(!canvas || !canvas.getContext) {
-            log("No available canvas.");
             return;
         }
 
@@ -312,4 +319,4 @@ var GameOfLife = (function(canvas) {
         'is_loaded': function() { return grid !== undefined; },
         'is_running': function() { return running; }
     };
-}(document.getElementsByTagName('canvas').item(0)));
+};
