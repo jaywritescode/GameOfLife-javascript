@@ -27,9 +27,9 @@ The `GameOfLife` object exposes eight functions:
 
 `stop`: Stops the game from running.
 
-`set_speed(/* Number */ s)`: Sets the speed of the game, generating each subsequent iteration after `s` microseconds.
+`set_speed(/* Number */ s)`: Sets the speed of the game, generating each subsequent iteration after <var>s</var> microseconds.
 
-`set_magnify(/* Number */ m)`: Sets the canvas magnification such that each game cell is drawn as an `m &times; m` square on the canvas.
+`set_magnify(/* Number */ m)`: Sets the canvas magnification such that each game cell is drawn as an <var>m</var>&nbsp;&times;&nbsp;<var>m</var> square on the canvas.
 
 `is_loaded`: Returns true iff the game's initial pattern string is processed.
 
