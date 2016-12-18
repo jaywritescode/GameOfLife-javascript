@@ -1,3 +1,5 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 import GameOfLife from './gameoflife.jsx';
 
-console.log('loaded index.jsx');
+ReactDOM.render(<GameOfLife />, document.getElementById('main'));
