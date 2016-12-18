@@ -1,6 +1,93 @@
 var T = 1, F = 0;
 
-GameOfLife = function(canvas) {
+$(document).ready(function() {
+     var gameoflife = new GameOfLife(document.getElementById('canvas'));
+     var init_speed = 600;
+     var __rle = document.getElementById('rle'),
+         __nextBtn = document.getElementById('next_btn'),
+         __runBtn = document.getElementById('run_btn');
+
+
+     // set up the magnification select element
+     $('#magnify').change( function() {
+       gameoflife.set_magnify(parseInt(this.value));
+     });
+
+     // set up the speed slider element
+     $('#speed').slider({
+       min: 0,
+       max: 2000,
+       value: init_speed,
+       step: 50,
+       change: function(evt, ui) {
+         $(this).prev().text(ui.value);
+         gameoflife.set_speed(ui.value);
+       }
+     }).prev().text(init_speed);
+
+     // since we have jQuery UI loaded, we might as well make pretty buttons
+     $('#game_buttons button').button();
+
+     // hook up the next/generate button
+     $(__nextBtn).click(function() {
+       try {
+         if (!doLoad()) {
+           return;
+         }
+       }
+       catch(e) {
+         alert(e);
+         return;
+       }
+
+       gameoflife.next();
+     });
+
+     $(__runBtn).click(function() {
+       try {
+         doLoad();
+       }
+       catch(e) {
+         alert(e);
+         return;
+       }
+
+       var $txtEl = $('.ui-button-text > span', __runBtn),
+           toggleClasses = 'icon-play icon-pause'
+
+       if (!gameoflife.is_running()) {
+         gameoflife.run();
+         $txtEl.text('Stop').toggleClass(toggleClasses);
+         __nextBtn.disabled = true;
+       }
+       else {
+         gameoflife.stop();
+         $txtEl.text('Run').toggleClass(toggleClasses);
+         __nextBtn.disabled = false;
+       }
+     });
+
+     function doLoad() {
+       if (gameoflife.is_loaded()) {
+         return true;
+       }
+
+       gameoflife.load(__rle.value);
+       __rle.readOnly = true;
+       $('.ui-button-text > span', __nextBtn).text('Next');    /* if we were using jQuery UI icons,
+                                                                  we could just do $(__nextBtn).button({label: 'Next'}) */
+       $(__runBtn).removeClass('hidden');
+       return false;
+     }
+
+
+
+
+
+
+
+
+GameOfLife = function(el) {
     var grid,
         born,
         survives,
