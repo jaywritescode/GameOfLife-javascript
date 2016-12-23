@@ -1,5 +1,5 @@
 import React from 'react';
-import { expect } from 'chai';
+import { assert, expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 
 var fs = require('fs');
@@ -20,28 +20,41 @@ describe('<RunLengthEncodingTextarea>', function() {
       const wrapper = shallow(<RunLengthEncodingTextarea />);
       const inst = wrapper.instance();
       wrapper.setState({
-        value: ''
+        value: fs.readFileSync('patterns/no_seed_data.rle', 'utf8')
       });
       expect(inst.parse.bind(inst)).to.throw(Error, /No seed data/);
     });
 
-    describe("invalid header", function() {
-      it("throws an error if there's only comments in the RLE", function() {
+    it('ignores comment lines', function() {
+      const wrapper = shallow(<RunLengthEncodingTextarea />);
+      const inst = wrapper.instance();
+      wrapper.setState({
+        value: fs.readFileSync('patterns/comment_data_only.rle', 'utf8')
+      });
+      assert.throws(inst.parse.bind(inst), Error);                  // bdd style doesn't work here for some reason
+      assert.doesNotThrow(inst.parse.bind(inst), /No seed data/);
+    });
+
+    describe('invalid header', function() {
+      it('throws an error if the rows or columns are invalid', function() {
         const wrapper = shallow(<RunLengthEncodingTextarea />);
         const inst = wrapper.instance();
         wrapper.setState({
-          value: fs.readFileSync('patterns/commentsonly.rle', 'utf8')
+          value: fs.readFileSync('patterns/bad_rows_value.rle', 'utf8')
         });
         expect(inst.parse.bind(inst)).to.throw(Error, /Invalid/);
       });
 
-      it("throws an error if the header cannot be parsed", function() {
+      it('assumes the default rule string if none is given', function() {
         const wrapper = shallow(<RunLengthEncodingTextarea />);
         const inst = wrapper.instance();
         wrapper.setState({
-          value: fs.readFileSync('patterns/invalidheader.rle', 'utf8')
+          value: fs.readFileSync('patterns/no_rule_string.rle', 'utf8')
         });
-        expect(inst.parse.bind(inst)).to.throw(Error, /Invalid/);
+
+        const result = inst.parse.call(inst);
+        expect(result).to.have.property('born').that.deep.equals([0, 0, 0, 1, 0, 0, 0, 0, 0]);
+        expect(result).to.have.property('survives').that.deep.equals([0, 0, 1, 1, 0, 0, 0, 0, 0]);
       });
     });
   });
