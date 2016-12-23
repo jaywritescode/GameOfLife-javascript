@@ -31,8 +31,7 @@ export default class RunLengthEncodingTextarea extends React.Component {
    * @return {GameProperties} the starting properties of the game
    */
   parse() {
-    const rle = this.state.value;
-
+    const rle = this.state.value.trim();
     let grid = null,
         born = [F, F, F, F, F, F, F, F, F],
         survives = [F, F, F, F, F, F, F, F, F];
@@ -41,7 +40,7 @@ export default class RunLengthEncodingTextarea extends React.Component {
       throw new Error('No seed data.');
     }
 
-    let linearray, headerarray, rulearray, cells, rowGrid;
+    let linearray, headerarray, rulearray, cells, rowGrid, columns, rows;
 
     // trim comments from the start and end of the RLE, then split by newlines
     linearray = rle.replace(/^#.*\n/gm, '').replace(/!.*/m, '').split('\n');
@@ -49,15 +48,9 @@ export default class RunLengthEncodingTextarea extends React.Component {
     // the header line is now the first line of linearray, split it by commas
     headerarray = linearray.shift().split(/,\s*/);
 
-    try {
-      columns = numberRegex.exec(headerarray[0])[0];
-      rows = numberRegex.exec(headerarray[1])[0];
-    }
-    catch(e) {
-      throw new Error(invalidRleMessage);
-    }
-
-    if(isNaN(columns) || isNaN(rows) || columns < 1 || rows < 1) {
+    columns = (numberRegex.exec(headerarray[0]) || [0])[0];
+    rows = (numberRegex.exec(headerarray[1]) || [0])[0];
+    if(columns < 1 || rows < 1) {
       throw new Error(invalidRleMessage);
     }
 
