@@ -4,7 +4,7 @@ const F = 0, T = 1;
 
 const invalidRleMessage = "Invalid run-length encoding. Can't create seed pattern.";
 const numberRegex = /[1-9]\d*/,
-      ruleRegex = /(B([0-8]*)\/(S([0-8]*))|(([0-8]*))\/([0-8]*))/i;
+      ruleRegex = /B?([0-8]+)\/S?([0-8]+)/i;
 
 export default class RunLengthEncodingTextarea extends React.Component {
   constructor(props) {
@@ -61,11 +61,11 @@ export default class RunLengthEncodingTextarea extends React.Component {
 
       // parse the rule string
       // create some temporary variables
-      var i, j, a = (rulearray[2] || rulearray[7]).split('');         // rule[2] || rule[7] is the "born" part of the rule
+      var i, j, a = (rulearray[1]).split('');     // rulearray[1] is the "born" part of the rule
       while((i = a.shift()) !== undefined) {
         born[i] = T;
       }
-      a = (rulearray[3] || rulearray[6]).split('');                   // rule[3] || rule[6] is the "survives" part of the rule
+      a = (rulearray[2]).split('');               // rulearray[2] is the "survives" part of the rule
       while((i = a.shift()) !== undefined) {
         survives[i] = T;
       }
