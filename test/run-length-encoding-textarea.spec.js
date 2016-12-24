@@ -45,17 +45,38 @@ describe('<RunLengthEncodingTextarea>', function() {
         expect(inst.parse.bind(inst)).to.throw(Error, /Invalid/);
       });
 
-      it('assumes the default rule string if none is given', function() {
+      it('throws an error if the rule string is invalid', function() {
         const wrapper = shallow(<RunLengthEncodingTextarea />);
         const inst = wrapper.instance();
         wrapper.setState({
-          value: fs.readFileSync('patterns/no_rule_string.rle', 'utf8')
+          value: fs.readFileSync('patterns/invalid_rule_string.rle', 'utf8')
         });
-
-        const result = inst.parse.call(inst);
-        expect(result).to.have.property('born').that.deep.equals([0, 0, 0, 1, 0, 0, 0, 0, 0]);
-        expect(result).to.have.property('survives').that.deep.equals([0, 0, 1, 1, 0, 0, 0, 0, 0]);
+        expect(inst.parse.bind(inst)).to.throw(Error, /Invalid/);
       });
+    });
+
+    it('assumes the default rule string if none is given', function() {
+      const wrapper = shallow(<RunLengthEncodingTextarea />);
+      const inst = wrapper.instance();
+      wrapper.setState({
+        value: fs.readFileSync('patterns/no_rule_string.rle', 'utf8')
+      });
+
+      const result = inst.parse.call(inst);
+      expect(result).to.have.property('born').that.deep.equals([0, 0, 0, 1, 0, 0, 0, 0, 0]);
+      expect(result).to.have.property('survives').that.deep.equals([0, 0, 1, 1, 0, 0, 0, 0, 0]);
+    });
+
+    it('parses the rule string', function() {
+      const wrapper = shallow(<RunLengthEncodingTextarea />);
+      const inst = wrapper.instance();
+      wrapper.setState({
+        value: fs.readFileSync('patterns/non_standard_rule_string.rle', 'utf8')
+      });
+
+      const result = inst.parse.call(inst);
+      expect(result).to.have.property('born').that.deep.equals([0, 0, 0, 1, 0, 0, 1, 0, 1]);
+      expect(result).to.have.property('survives').that.deep.equals([0, 0, 1, 0, 1, 1, 0, 0, 0]);
     });
   });
 });
