@@ -8,6 +8,8 @@ import RunLengthEncodingTextarea from '../run-length-encoding-textarea.jsx';
 
 describe('<RunLengthEncodingTextarea>', function() {
 
+
+
   describe('#render', function() {
     it('renders', function() {
       const wrapper = shallow(<RunLengthEncodingTextarea />);
@@ -77,6 +79,15 @@ describe('<RunLengthEncodingTextarea>', function() {
       const result = inst.parse.call(inst);
       expect(result).to.have.property('born').that.deep.equals([0, 0, 0, 1, 0, 0, 1, 0, 1]);
       expect(result).to.have.property('survives').that.deep.equals([0, 0, 1, 0, 1, 1, 0, 0, 0]);
+    });
+
+    it('parses the initial board state', function() {
+      const wrapper = shallow(<RunLengthEncodingTextarea />);
+      const inst = wrapper.instance();
+      wrapper.setState({
+        value: fs.readFileSync('patterns/glider.rle', 'utf8')
+      });
+      expect(inst.parse.call(inst)).to.have.property('grid').that.deep.equals([[0, 1, 0], [0, 0, 1], [1, 1, 1]]);
     });
   });
 });
