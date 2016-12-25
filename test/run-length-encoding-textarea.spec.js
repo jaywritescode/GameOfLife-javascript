@@ -8,8 +8,6 @@ import RunLengthEncodingTextarea from '../run-length-encoding-textarea.jsx';
 
 describe('<RunLengthEncodingTextarea>', function() {
 
-
-
   describe('#render', function() {
     it('renders', function() {
       const wrapper = shallow(<RunLengthEncodingTextarea />);
@@ -18,9 +16,14 @@ describe('<RunLengthEncodingTextarea>', function() {
   });
 
   describe('#parse', function() {
+    let wrapper, inst;
+
+    beforeEach(function() {
+      wrapper = shallow(<RunLengthEncodingTextarea />);
+      inst = wrapper.instance();
+    });
+
     it("throws an error if there's no seed data", function() {
-      const wrapper = shallow(<RunLengthEncodingTextarea />);
-      const inst = wrapper.instance();
       wrapper.setState({
         value: fs.readFileSync('patterns/no_seed_data.rle', 'utf8')
       });
@@ -28,8 +31,6 @@ describe('<RunLengthEncodingTextarea>', function() {
     });
 
     it('ignores comment lines', function() {
-      const wrapper = shallow(<RunLengthEncodingTextarea />);
-      const inst = wrapper.instance();
       wrapper.setState({
         value: fs.readFileSync('patterns/comment_data_only.rle', 'utf8')
       });
@@ -39,8 +40,6 @@ describe('<RunLengthEncodingTextarea>', function() {
 
     describe('invalid header', function() {
       it('throws an error if the rows or columns are invalid', function() {
-        const wrapper = shallow(<RunLengthEncodingTextarea />);
-        const inst = wrapper.instance();
         wrapper.setState({
           value: fs.readFileSync('patterns/bad_rows_value.rle', 'utf8')
         });
@@ -48,8 +47,6 @@ describe('<RunLengthEncodingTextarea>', function() {
       });
 
       it('throws an error if the rule string is invalid', function() {
-        const wrapper = shallow(<RunLengthEncodingTextarea />);
-        const inst = wrapper.instance();
         wrapper.setState({
           value: fs.readFileSync('patterns/invalid_rule_string.rle', 'utf8')
         });
@@ -58,8 +55,6 @@ describe('<RunLengthEncodingTextarea>', function() {
     });
 
     it('assumes the default rule string if none is given', function() {
-      const wrapper = shallow(<RunLengthEncodingTextarea />);
-      const inst = wrapper.instance();
       wrapper.setState({
         value: fs.readFileSync('patterns/no_rule_string.rle', 'utf8')
       });
@@ -70,8 +65,6 @@ describe('<RunLengthEncodingTextarea>', function() {
     });
 
     it('parses the rule string', function() {
-      const wrapper = shallow(<RunLengthEncodingTextarea />);
-      const inst = wrapper.instance();
       wrapper.setState({
         value: fs.readFileSync('patterns/non_standard_rule_string.rle', 'utf8')
       });
@@ -82,12 +75,12 @@ describe('<RunLengthEncodingTextarea>', function() {
     });
 
     it('parses the initial board state', function() {
-      const wrapper = shallow(<RunLengthEncodingTextarea />);
-      const inst = wrapper.instance();
       wrapper.setState({
         value: fs.readFileSync('patterns/glider.rle', 'utf8')
       });
       expect(inst.parse.call(inst)).to.have.property('grid').that.deep.equals([[0, 1, 0], [0, 0, 1], [1, 1, 1]]);
     });
   });
+
+  describe.skip('#handleChange');
 });
