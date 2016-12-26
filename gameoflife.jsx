@@ -6,7 +6,6 @@ import RunLengthEncodingTextarea from './run-length-encoding-textarea.jsx';
 import MagnifySelect from './magnify-select.jsx';
 import SpeedSlider from './speed-slider.jsx';
 
-
 export default class GameOfLife extends React.Component {
   constructor(props) {
     super(props);
@@ -21,18 +20,23 @@ export default class GameOfLife extends React.Component {
   }
 
   handleLoadBtnClick(evt) {
-    try {
-      const rle = this.rleInput.value();
-      const { grid, born, survives } = this.rleInput.parse();
-
-      if (rle != this.state.rle) {
-        this.setState({
-          rle, grid, born, survives
-        });
-      }
+    const rle = this.rleInput.value();
+    if (rle == this.state.rle) {
+      // go to the next state
     }
-    catch(e) {
-      console.log(e);
+    else {
+      try {
+        const { grid, born, survives } = this.rleInput.parse();
+
+        if (rle != this.state.rle) {
+          this.setState({
+            rle, grid, born, survives
+          });
+        }
+      }
+      catch(e) {
+        console.log(e);
+      }
     }
   }
 

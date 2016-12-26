@@ -5,7 +5,7 @@
   "main": "index.jsx",
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "test": "mocha --require jsdom-global/register --compilers js:babel-register"
+    "test": "mocha --require ignore-styles --require jsdom-global/register --compilers js:babel-register"
   },
   "repository": {
     "type": "git",
@@ -31,11 +31,13 @@
     "chai": "^3.5.0",
     "css-loader": "^0.26.1",
     "enzyme": "^2.6.0",
+    "ignore-styles": "^5.0.1",
     "jsdom": "9.8.3",
     "jsdom-global": "2.1.0",
     "mocha": "^3.2.0",
     "react-addons-test-utils": "^15.4.1",
     "sass-loader": "^4.1.0",
+    "sinon": "^1.17.6",
     "style-loader": "^0.13.1",
     "webpack": "^1.14.0"
   },
