@@ -1,9 +1,11 @@
+/* eslint-env node, mocha */
+
 import React from 'react';
 import { assert, expect } from 'chai';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 
-import { Button } from 'react-toolbox/lib/button'
+import { Button } from 'react-toolbox/lib/button';
 
 var fs = require('fs');
 

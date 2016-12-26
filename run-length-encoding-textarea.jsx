@@ -76,7 +76,7 @@ export default class RunLengthEncodingTextarea extends React.Component {
     rowGrid = [];
 
     while((i = cells.match(/([1-9]\d*)?([bo\$])/i)) !== null) {
-      if(i.index != 0) { throw new Error("Invalid RLE string."); }
+      if(i.index != 0) { throw new Error('Invalid RLE string.'); }
 
       // if <count> is missing from the regex, then set it to one
       var count = i[1] || 1;
@@ -110,7 +110,7 @@ export default class RunLengthEncodingTextarea extends React.Component {
 
     // pad out the final row
     while(rowGrid.length < columns) {
-        rowGrid.push(0);
+      rowGrid.push(0);
     }
     grid.push(rowGrid);
 
