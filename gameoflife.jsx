@@ -8,14 +8,46 @@ import SpeedSlider from './speed-slider.jsx';
 
 
 export default class GameOfLife extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      rle: null,
+      grid: null,
+      born: null,
+      survives: null
+    };
+
+    this.handleLoadBtnClick.bind(this);
+  }
+
+  handleLoadBtnClick(evt) {
+    try {
+      const rle = this.rleInput.value();
+      const { grid, born, survives } = this.rleInput.parse();
+
+      if (rle != this.state.rle) {
+        this.setState({
+          rle, grid, born, survives
+        });
+      }
+    }
+    catch(e) {
+      console.log(e);
+    }
+  }
+
   render() {
     return (
       <div>
         <Canvas />
-        <RunLengthEncodingTextarea />
+        <RunLengthEncodingTextarea ref={(component) => this.rleInput = component} />
         <MagnifySelect />
         <SpeedSlider value={this.props.init_speed} />
-        <Button label="blah" />
+        <Button
+          id="loadBtn"
+          label={this.isLoaded ? 'next' : 'generate'}
+          onClick={(e) => this.handleLoadBtnClick(e)} />
+        <Button label="run" />
       </div>
     );
   }

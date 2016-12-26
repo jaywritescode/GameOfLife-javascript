@@ -26,7 +26,7 @@ export default class RunLengthEncodingTextarea extends React.Component {
    * @return {GameProperties} the starting properties of the game
    */
   parse() {
-    const rle = this.textInput.value.trim();
+    const rle = this.value();
     let grid = null,
         born = [F, F, F, F, F, F, F, F, F],
         survives = [F, F, F, F, F, F, F, F, F];
@@ -119,6 +119,10 @@ export default class RunLengthEncodingTextarea extends React.Component {
       born: born,
       survives: survives,
     };
+  }
+
+  value() {
+    return this.textInput.value = this.textInput.value.trim();
   }
 
   render() {
