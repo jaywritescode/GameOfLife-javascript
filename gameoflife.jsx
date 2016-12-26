@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-toolbox/lib/button'
+import { Button } from 'react-toolbox/lib/button';
 
 import Canvas from './canvas.jsx';
 import RunLengthEncodingTextarea from './run-length-encoding-textarea.jsx';
@@ -27,12 +27,14 @@ export default class GameOfLife extends React.Component {
     else {
       try {
         const { grid, born, survives } = this.rleInput.parse();
-
-        if (rle != this.state.rle) {
-          this.setState({
-            rle, grid, born, survives
-          });
-        }
+        this.setState({
+          rle: rle,
+          grid: grid,
+          born: born,
+          survives: survives,
+          isLoaded: true,
+          iteration: 0,
+        });
       }
       catch(e) {
         console.log(e);
@@ -48,8 +50,8 @@ export default class GameOfLife extends React.Component {
         <MagnifySelect />
         <SpeedSlider value={this.props.init_speed} />
         <Button
-          id="loadBtn"
-          label={this.isLoaded ? 'next' : 'generate'}
+          className='.loadBtn'
+          label={this.state.isLoaded ? 'next' : 'generate'}
           onClick={(e) => this.handleLoadBtnClick(e)} />
         <Button label="run" />
       </div>
