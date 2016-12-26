@@ -1,6 +1,14 @@
 import React from 'react';
 
 export default class Canvas extends React.Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+
+  draw(state) {
+
+  }
+
   render() {
     return (
       <canvas id="canvas" {...this.props} />

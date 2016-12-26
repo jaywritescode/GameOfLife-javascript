@@ -11,6 +11,7 @@ var fs = require('fs');
 
 import GameOfLife from '../gameoflife.jsx';
 import MagnifySelect from '../magnify-select.jsx';
+import Canvas from '../canvas.jsx';
 
 describe('<GameOfLife>', function() {
 
@@ -72,8 +73,20 @@ describe('<GameOfLife>', function() {
 
     it('changes the magnification level', function() {
       assert.equal(wrapper.state().magnify, 1);
+
       select.simulate('change', {target: {value: '5'}});
       expect(wrapper.state().magnify).to.eq(5);
+    });
+
+    it('passes the magnification onto the Canvas component', function() {
+      assert.equal(wrapper.state().magnify, 1);
+
+      const canvas = wrapper.find(Canvas).get(0);
+      let spy = sinon.spy(canvas, 'draw');
+      const nextState = { magnify: 5 };
+
+      wrapper.setState(nextState);
+      expect(spy.calledWith(sinon.match(nextState))).to.be.true;
     });
   });
 });

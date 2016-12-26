@@ -23,6 +23,24 @@ export default class GameOfLife extends React.Component {
     this.handleMagnifySelectChange.bind(this);
   }
 
+  /****************************************************************************
+   * lifecycle methods
+   ***************************************************************************/
+  componentDidUpdate(prevProps, prevState) {
+    // TODO: this is not ideal
+    if (prevState.magnify != this.state.magnify) {
+      this.canvas.draw(this.state);
+    }
+  }
+
+  /****************************************************************************
+   * private methods
+   ***************************************************************************/
+
+
+  /****************************************************************************
+   * event handlers
+   ***************************************************************************/
   handleMagnifySelectChange(evt) {
     const magnify = +evt.target.value;
     if ([1, 2, 4, 5, 8].indexOf(magnify) > -1) {
@@ -58,7 +76,7 @@ export default class GameOfLife extends React.Component {
   render() {
     return (
       <div>
-        <Canvas />
+        <Canvas ref={(component) => this.canvas = component} />
         <RunLengthEncodingTextarea ref={(component) => this.rleInput = component} />
         <MagnifySelect onchange={(e) => this.handleMagnifySelectChange(e)} />
         <SpeedSlider value={this.props.init_speed} />
