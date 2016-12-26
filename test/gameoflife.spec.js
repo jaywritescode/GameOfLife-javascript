@@ -10,6 +10,7 @@ import { Button } from 'react-toolbox/lib/button';
 var fs = require('fs');
 
 import GameOfLife from '../gameoflife.jsx';
+import MagnifySelect from '../magnify-select.jsx';
 
 describe('<GameOfLife>', function() {
 
@@ -58,6 +59,21 @@ describe('<GameOfLife>', function() {
         loadBtn.simulate('click');
         expect(loadBtn.props().label).to.equal('next');
       });
+    });
+  });
+
+  describe('#handleMagnifySelectChange', function() {
+    let wrapper, select;
+
+    beforeEach(function() {
+      wrapper = mount(<GameOfLife />);
+      select = wrapper.find('select');
+    });
+
+    it('changes the magnification level', function() {
+      assert.equal(wrapper.state().magnify, 1);
+      select.simulate('change', {target: {value: '5'}});
+      expect(wrapper.state().magnify).to.eq(5);
     });
   });
 });

@@ -5,7 +5,7 @@ export default class MagnifySelect extends React.Component {
     return (
       <div>
         <label htmlFor="magnify">magnification</label>
-        <select id="magnify" defaultValue="1">
+        <select id="magnify" onChange={this.props.onchange} defaultValue="1">
           <option value="1">1&times;</option>
           <option value="2">2&times;</option>
           <option value="4">4&times;</option>
@@ -15,4 +15,8 @@ export default class MagnifySelect extends React.Component {
       </div>
     );
   }
+}
+
+MagnifySelect.propTypes = {
+  onchange: React.PropTypes.func.isRequired,
 }

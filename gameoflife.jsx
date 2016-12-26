@@ -13,10 +13,23 @@ export default class GameOfLife extends React.Component {
       rle: null,
       grid: null,
       born: null,
-      survives: null
+      survives: null,
+      isLoaded: false,
+      iteration: 0,
+      magnify: 1,
     };
 
     this.handleLoadBtnClick.bind(this);
+    this.handleMagnifySelectChange.bind(this);
+  }
+
+  handleMagnifySelectChange(evt) {
+    const magnify = +evt.target.value;
+    if ([1, 2, 4, 5, 8].indexOf(magnify) > -1) {
+      this.setState({
+        magnify: magnify
+      });
+    }
   }
 
   handleLoadBtnClick(evt) {
@@ -47,7 +60,7 @@ export default class GameOfLife extends React.Component {
       <div>
         <Canvas />
         <RunLengthEncodingTextarea ref={(component) => this.rleInput = component} />
-        <MagnifySelect />
+        <MagnifySelect onchange={(e) => this.handleMagnifySelectChange(e)} />
         <SpeedSlider value={this.props.init_speed} />
         <Button
           className='.loadBtn'
