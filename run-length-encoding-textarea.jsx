@@ -9,11 +9,6 @@ const numberRegex = /[1-9]\d*/,
 export default class RunLengthEncodingTextarea extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: '',
-    };
-
-    this.handleChange = this.handleChange.bind(this);
   }
 
   /**
@@ -31,7 +26,7 @@ export default class RunLengthEncodingTextarea extends React.Component {
    * @return {GameProperties} the starting properties of the game
    */
   parse() {
-    const rle = this.state.value.trim();
+    const rle = this.textInput.value.trim();
     let grid = null,
         born = [F, F, F, F, F, F, F, F, F],
         survives = [F, F, F, F, F, F, F, F, F];
@@ -126,19 +121,9 @@ export default class RunLengthEncodingTextarea extends React.Component {
     };
   }
 
-  handleChange(evt) {
-    this.setState({
-      value: evt.target.value
-    });
-  }
-
   render() {
     return (
-      <textarea
-        id="rle"
-        value={this.state.value}
-        onChange={this.handleChange}
-        {...this.props} />
+      <textarea id="rle" ref={(component) => this.textInput = component} {...this.props} />
     );
   }
 }
