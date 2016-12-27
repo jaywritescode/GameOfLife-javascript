@@ -15,7 +15,7 @@ export default class GameOfLife extends React.Component {
       born: null,
       survives: null,
       isLoaded: false,
-      iteration: 0,
+      iteration: -1,
       magnify: 1,
       xleft: null,
       ytop: null,
@@ -30,6 +30,9 @@ export default class GameOfLife extends React.Component {
    ***************************************************************************/
   componentDidUpdate(prevProps, prevState) {
     // TODO: this is not ideal
+    if (prevState.iteration != this.state.iteration) {
+      this.canvas.draw(this.state);
+    }
     if (prevState.magnify != this.state.magnify) {
       this.canvas.draw(this.state);
     }

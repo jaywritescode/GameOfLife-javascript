@@ -23,12 +23,13 @@ describe('<GameOfLife>', function() {
   });
 
   describe('#handleLoadBtnClick', function() {
-    let wrapper, loadBtn, runBtn;
+    let wrapper, loadBtn, runBtn, canvas;
 
     beforeEach(function() {
       wrapper = mount(<GameOfLife />);
       loadBtn = wrapper.find(Button).at(0);
       runBtn = wrapper.find(Button).at(1);
+      canvas = wrapper.find(Canvas).get(0);
     });
 
     describe('not loaded and initialized', function() {
@@ -88,6 +89,13 @@ describe('<GameOfLife>', function() {
 
         loadBtn.simulate('click');
         expect(runBtn.props().disabled).to.be.false;
+      });
+
+      it('draws the game on the canvas', function() {
+        var stub = sinon.stub(canvas, 'draw');
+
+        loadBtn.simulate('click');
+        expect(stub.called).to.be.true;
       });
     });
   });
