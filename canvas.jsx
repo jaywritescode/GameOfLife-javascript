@@ -20,15 +20,17 @@ export default class Canvas extends React.Component {
    * @param {CanvasState} the state of the game
    */
   draw(state) {
-    var context, m = state.magnify || 1;
-    var canvas = document.getElementById('canvas');
-    var rows = state.grid.length, columns = state.grid[0].length;
+    const canvas = document.getElementById('canvas');
+    const { ytop, xleft, grid, magnify } = state;
+    const rows = grid.length,
+          columns = grid[0].length;
+    const m = magnify || 1;
 
     if (!canvas || !canvas.getContext) {
       return;
     }
 
-    context = canvas.getContext('2d');
+    let context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     for(var y = canvas.height / 2 + (ytop * m), row = 0; row < rows; y += m, ++row) {
       for(var x = canvas.width / 2 + (xleft * m), col = 0; col < columns; x += m, ++col) {
