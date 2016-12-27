@@ -23,11 +23,12 @@ describe('<GameOfLife>', function() {
   });
 
   describe('#handleLoadBtnClick', function() {
-    let wrapper, loadBtn;
+    let wrapper, loadBtn, runBtn;
 
     beforeEach(function() {
       wrapper = mount(<GameOfLife />);
       loadBtn = wrapper.find(Button).at(0);
+      runBtn = wrapper.find(Button).at(1);
     });
 
     describe('not loaded and initialized', function() {
@@ -80,6 +81,13 @@ describe('<GameOfLife>', function() {
 
         loadBtn.simulate('click');
         expect(loadBtn.props().label).to.equal('next');
+      });
+
+      it('enables the "run" button', function() {
+        assert.isTrue(runBtn.props().disabled);
+
+        loadBtn.simulate('click');
+        expect(runBtn.props().disabled).to.be.false;
       });
     });
   });

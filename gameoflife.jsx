@@ -88,7 +88,7 @@ export default class GameOfLife extends React.Component {
           className='.loadBtn'
           label={this.state.isLoaded ? 'next' : 'generate'}
           onClick={(e) => this.handleLoadBtnClick(e)} />
-        <Button label="run" />
+        <Button label="run" disabled={!this.state.isLoaded} />
       </div>
     );
   }
