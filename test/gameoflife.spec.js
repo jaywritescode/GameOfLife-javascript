@@ -85,11 +85,13 @@ describe('<GameOfLife>', function() {
   });
 
   describe('#handleMagnifySelectChange', function() {
-    let wrapper, select;
+    let wrapper, select, canvas, stub;
 
     beforeEach(function() {
       wrapper = mount(<GameOfLife />);
       select = wrapper.find('select');
+      canvas = wrapper.find(Canvas).get(0);
+      stub = sinon.stub(canvas, 'draw');
     });
 
     it('changes the magnification level', function() {
@@ -102,12 +104,10 @@ describe('<GameOfLife>', function() {
     it('passes the magnification onto the Canvas component', function() {
       assert.equal(wrapper.state().magnify, 1);
 
-      const canvas = wrapper.find(Canvas).get(0);
-      let spy = sinon.spy(canvas, 'draw');
       const nextState = { magnify: 5 };
 
       wrapper.setState(nextState);
-      expect(spy.calledWith(sinon.match(nextState))).to.be.true;
+      expect(stub.calledWith(sinon.match(nextState))).to.be.true;
     });
   });
 });
