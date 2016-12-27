@@ -34,8 +34,23 @@ describe('<GameOfLife>', function() {
       let rle, grid, born, survives;
 
       before(function() {
-        rle = fs.readFileSync('patterns/glider.rle', 'utf8');
-        grid = [[0, 0, 0], [1, 1, 1], [2, 2, 2]];
+        rle = fs.readFileSync('patterns/cow.rle', 'utf8');
+        grid = [
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+          ];
         born = [0, 0, 0, 0, 1, 1, 1, 1, 0];
         survives = [1, 1, 1, 1, 0, 0, 0, 0, 1];
       });
@@ -52,6 +67,12 @@ describe('<GameOfLife>', function() {
 
         loadBtn.simulate('click');
         expect(spy.called).to.be.true;
+      });
+
+      it('sets the boundaries of the canvas', function() {
+        loadBtn.simulate('click');
+        expect(wrapper.state().xleft).to.eq(-20);
+        expect(wrapper.state().ytop).to.eq(-3);
       });
 
       it('changes the "generate" button to "next"', function() {

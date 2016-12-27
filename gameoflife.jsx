@@ -17,6 +17,8 @@ export default class GameOfLife extends React.Component {
       isLoaded: false,
       iteration: 0,
       magnify: 1,
+      xleft: null,
+      ytop: null,
     };
 
     this.handleLoadBtnClick.bind(this);
@@ -65,6 +67,8 @@ export default class GameOfLife extends React.Component {
           survives: survives,
           isLoaded: true,
           iteration: 0,
+          xleft: -Math.floor(grid[0].length / 2),
+          ytop: -Math.floor(grid.length / 2),
         });
       }
       catch(e) {
