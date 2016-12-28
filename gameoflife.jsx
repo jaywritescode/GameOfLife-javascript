@@ -58,7 +58,7 @@ export default class GameOfLife extends React.Component {
   handleLoadBtnClick(evt) {
     const rle = this.rleInput.value();
     if (rle == this.state.rle) {
-      // go to the next state
+      this.next();
     }
     else {
       try {

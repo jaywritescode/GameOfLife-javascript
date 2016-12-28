@@ -24,12 +24,15 @@ describe('<GameOfLife>', function() {
 
   describe('#handleLoadBtnClick', function() {
     let wrapper, loadBtn, runBtn, canvas;
+    let inst;
 
     beforeEach(function() {
       wrapper = mount(<GameOfLife />);
       loadBtn = wrapper.find(Button).at(0);
       runBtn = wrapper.find(Button).at(1);
       canvas = wrapper.find(Canvas).get(0);
+
+      inst = wrapper.instance();
     });
 
     describe('not loaded and initialized', function() {
@@ -58,14 +61,14 @@ describe('<GameOfLife>', function() {
       });
 
       beforeEach(function() {
-        sinon.stub(wrapper.instance().rleInput, 'value').returns(rle);
-        sinon.stub(wrapper.instance().rleInput, 'parse').returns({ grid, born, survives });
+        sinon.stub(inst.rleInput, 'value').returns(rle);
+        sinon.stub(inst.rleInput, 'parse').returns({ grid, born, survives });
       });
 
       it('loads the pattern', function() {
         assert.isNull(wrapper.state('rle'));
 
-        var spy = sinon.spy(wrapper.instance(), 'setState');
+        var spy = sinon.spy(inst, 'setState');
 
         loadBtn.simulate('click');
         expect(spy.called).to.be.true;
@@ -96,6 +99,30 @@ describe('<GameOfLife>', function() {
 
         loadBtn.simulate('click');
         expect(stub.called).to.be.true;
+      });
+    });
+
+    describe('loaded and initialized', function() {
+      let rle;
+
+      before(function() {
+        rle = fs.readFileSync('patterns/cow.rle', 'utf8');
+      });
+
+      beforeEach(function() {
+        sinon.stub(inst.rleInput, 'value').returns(rle);
+        wrapper.setState({
+          rle: rle
+        });
+      });
+
+      it('generates the next iteration of the pattern', function() {
+        assert(rle == inst.state.rle);
+
+        var spy = sinon.spy(inst, 'next');
+
+        loadBtn.simulate('click');
+        expect(spy.called).to.be.true;
       });
     });
   });
