@@ -11,6 +11,10 @@ export default class RunLengthEncodingTextarea extends React.Component {
     super(props);
   }
 
+  parse() {
+    return RunLengthEncodingTextarea._doParse(this.value());
+  }
+
   /**
    * @typedef {Object} GameProperties
    * @property {Array} grid The starting pattern
@@ -23,10 +27,11 @@ export default class RunLengthEncodingTextarea extends React.Component {
   /**
    * Parses a Game of Life from the given run-length encoding.
    *
+   * @static
+   * @private
    * @return {GameProperties} the starting properties of the game
    */
-  parse() {
-    const rle = this.value();
+  static _doParse(rle) {
     let grid = null,
         born = [F, F, F, F, F, F, F, F, F],
         survives = [F, F, F, F, F, F, F, F, F];
