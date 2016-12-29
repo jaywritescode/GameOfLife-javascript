@@ -73,7 +73,6 @@ export default class GameOfLife extends React.Component {
 
     this._trimGrid();
     this.setState({
-      // also set xleft, ytop
       iteration: ++this.state.iteration
     });
   }
@@ -135,7 +134,6 @@ export default class GameOfLife extends React.Component {
             if(c == 0) {
               this.xleft--;
             }
-          //  ++columns;
             break;
           }
         }
@@ -157,7 +155,6 @@ export default class GameOfLife extends React.Component {
             else {
               grid.push(n);
             }
-            // ++rows;
             break;
           }
         }
@@ -172,21 +169,17 @@ export default class GameOfLife extends React.Component {
 
     if(grid[0].every(_isFalse)) {
       grid.shift();
-//      --rows,
      --this.ytop;
     }
     if(grid[grid.length - 1].every(_isFalse)) {
       grid.pop();
-//      --rows;
     }
     if(grid.map(function(val, i, arr) { return val[0]; }).every(_isFalse)) {
       grid.forEach(function(val, i, arr) { val.shift(); });
-//      --columns;
      --this.xleft;
     }
     if(grid.map(function(val, i, arr) { return val[val.length - 1]; }).every(_isFalse)) {
       grid.forEach(function(val, i, arr) { val.pop(); });
-//      --columns;
     }
   };
 
