@@ -17,31 +17,197 @@ export default class GameOfLife extends React.Component {
       isLoaded: false,
       iteration: -1,
       magnify: 1,
-      xleft: null,
-      ytop: null,
     };
 
     this.handleLoadBtnClick.bind(this);
     this.handleMagnifySelectChange.bind(this);
   }
 
+  get rows() {
+    return this.state.grid.length;
+  }
+
+  get columns() {
+    return this.state.grid[0].length;
+  }
+
+  get xleft() {
+    return this._xleft;
+  }
+
+  set xleft(value) {
+    this._xleft = value;
+  }
+
+  get ytop() {
+    return this._ytop;
+  }
+
+  set ytop(value) {
+    this._ytop = value;
+  }
+
+  next() {
+    var buffer = new Array(), cell;
+    var r, c;
+    const { grid, born, survives } = this.state;
+
+    this._expandGrid();
+    for(r = 0; r < this.rows; ++r) {
+      for(c = 0; c < this.columns; ++c) {
+        buffer.push({
+          'row': r,
+          'column': c,
+          'state': grid[r][c] ? survives[this._live_neighbors(r,c)] : born[this._live_neighbors(r,c)]
+        });
+        if(buffer.length > this.columns + 2) {
+          cell = buffer.shift();
+          grid[cell.row][cell.column] = cell.state;
+        }
+      }
+    }
+    while(buffer.length > 0) {
+      cell = buffer.shift();
+      grid[cell.row][cell.column] = cell.state;
+    }
+
+    this._trimGrid();
+    this.setState({
+      // also set xleft, ytop
+      iteration: ++this.state.iteration
+    });
+  }
+
   /****************************************************************************
    * lifecycle methods
    ***************************************************************************/
   componentDidUpdate(prevProps, prevState) {
+    const { grid, magnify } = this.state;
+    const newState = {
+      grid: grid,
+      magnify: magnify,
+      xleft: this.xleft,
+      ytop: this.ytop,
+    };
+
     // TODO: this is not ideal
     if (prevState.iteration != this.state.iteration) {
-      this.canvas.draw(this.state);
+      this.canvas.draw(newState);
     }
     if (prevState.magnify != this.state.magnify) {
-      this.canvas.draw(this.state);
+      this.canvas.draw(newState);
     }
   }
 
   /****************************************************************************
    * private methods
    ***************************************************************************/
+  _expandGrid() {
+    const { born, grid } = this.state;
+    var c, r, min = born.indexOf(1);
+    if(min < 0) {
+      return;         // this pattern just dies
+    }
+    if(min == 0) {
+      throw new Error("Birth with 0 live neighbors confuses me.");
+    }
+    min = min || 4;
 
+    if(min > 3) {
+      return;
+    }
+
+    // iterate over every collection of three consecutive cells around the grid's border.
+    // if at least "min" of each of them are live, then the game will spill over the border and we need a new row (column)
+    if(this.rows >= min) {
+      // this for statement just checks the first column in the grid and the last
+      for(c = 0; c < this.columns; c += this.columns - 1) {
+        for(r = 1; r < this.rows - 1; ++r) {
+          if(grid[r - 1][c] + grid[r][c] + grid[r + 1][c] >= min) {
+            for(r = 0; r < this.rows; ++r) {
+              if(c == 0) {
+                grid[r].unshift(0);
+              }
+              else {
+                grid[r].push(0);
+              }
+            }
+            if(c == 0) {
+              this.xleft--;
+            }
+          //  ++columns;
+            break;
+          }
+        }
+      }
+    }
+    if(this.columns >= min) {
+      for(r = 0; r < this.rows; r += this.rows - 1) {
+        for(c = 1; c < this.columns - 1; ++c) {
+          if(grid[r][c - 1] + grid[r][c] + grid[r][c + 1] >= min) {
+            var n = Array();
+            for(c = 0; c < this.columns; ++c) {
+              n[c] = 0;
+            }
+
+            if(r == 0) {
+              grid.unshift(n);
+              --this.ytop;
+            }
+            else {
+              grid.push(n);
+            }
+            // ++rows;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  _trimGrid() {
+    const grid = this.state.grid;
+
+    function _isFalse(val) { return !val; }
+
+    if(grid[0].every(_isFalse)) {
+      grid.shift();
+//      --rows,
+     --this.ytop;
+    }
+    if(grid[grid.length - 1].every(_isFalse)) {
+      grid.pop();
+//      --rows;
+    }
+    if(grid.map(function(val, i, arr) { return val[0]; }).every(_isFalse)) {
+      grid.forEach(function(val, i, arr) { val.shift(); });
+//      --columns;
+     --this.xleft;
+    }
+    if(grid.map(function(val, i, arr) { return val[val.length - 1]; }).every(_isFalse)) {
+      grid.forEach(function(val, i, arr) { val.pop(); });
+//      --columns;
+    }
+  };
+
+  _live_neighbors(row, column) {
+    var live_neighbors = 0, delta_r, delta_c;
+    const rows = this.rows,
+          columns = this.columns;
+
+    for(delta_r = -1; delta_r <= 1; ++delta_r) {
+      if(row + delta_r < 0 || row + delta_r >= rows) {
+        continue;
+      }
+      for(delta_c = -1; delta_c <= 1; ++delta_c) {
+        if(column + delta_c < 0 || column + delta_c >= columns || (delta_r == 0 && delta_c == 0)) {
+          continue;
+        }
+      live_neighbors += this.state.grid[row + delta_r][column + delta_c];
+      }
+    }
+    return live_neighbors;
+  }
 
   /****************************************************************************
    * event handlers
@@ -70,9 +236,10 @@ export default class GameOfLife extends React.Component {
           survives: survives,
           isLoaded: true,
           iteration: 0,
-          xleft: -Math.floor(grid[0].length / 2),
-          ytop: -Math.floor(grid.length / 2),
         });
+
+        this.xleft = -Math.floor(grid[0].length / 2);
+        this.ytop =  -Math.floor(grid.length / 2);
       }
       catch(e) {
         console.log(e);
