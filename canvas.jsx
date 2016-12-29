@@ -22,6 +22,12 @@ export default class Canvas extends React.Component {
   draw(state) {
     const canvas = document.getElementById('canvas');
     const { ytop, xleft, grid, magnify } = state;
+
+    if (!grid) {
+      console.warn('CanvasState is undefined.');
+      return;
+    }
+
     const rows = grid.length,
           columns = grid[0].length;
     const m = magnify || 1;
