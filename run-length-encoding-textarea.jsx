@@ -123,6 +123,7 @@ export default class RunLengthEncodingTextarea extends React.Component {
       grid: grid,
       born: born,
       survives: survives,
+      rle: rle,
     };
   }
 

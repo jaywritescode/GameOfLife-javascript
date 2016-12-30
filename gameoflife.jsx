@@ -11,7 +11,6 @@ export default class GameOfLife extends React.Component {
     super(props);
     this.state = {
       rle: null,
-      grid: null,
       born: null,
       survives: null,
       isLoaded: false,
@@ -23,12 +22,38 @@ export default class GameOfLife extends React.Component {
     this.handleMagnifySelectChange.bind(this);
   }
 
+  _initialize() {
+    if (this.rleInput) {
+      try {
+        const { rle, grid, born, survives } = this.rleInput.parse();
+
+        this._grid = grid;
+        this.xleft = -Math.floor(grid[0].length / 2);
+        this.ytop =  -Math.floor(grid.length / 2);
+        this.setState({
+          rle: rle,
+          born: born,
+          survives: survives,
+          isLoaded: true,
+          iteration: 0,
+        });
+      }
+      catch(e) {
+        console.log(e);
+      }
+    }
+  }
+
+  get grid() {
+    return this._grid;
+  }
+
   get rows() {
-    return this.state.grid.length;
+    return this.grid.length;
   }
 
   get columns() {
-    return this.state.grid[0].length;
+    return this.grid[0].length;
   }
 
   get xleft() {
@@ -47,10 +72,14 @@ export default class GameOfLife extends React.Component {
     this._ytop = value;
   }
 
+  get rleInput() {
+    return this._rleInput;
+  }
+
   next() {
     var buffer = new Array(), cell;
     var r, c;
-    const { grid, born, survives } = this.state;
+    const { born, survives } = this.state;
 
     this._expandGrid();
     for(r = 0; r < this.rows; ++r) {
@@ -58,22 +87,22 @@ export default class GameOfLife extends React.Component {
         buffer.push({
           'row': r,
           'column': c,
-          'state': grid[r][c] ? survives[this._live_neighbors(r,c)] : born[this._live_neighbors(r,c)]
+          'state': this.grid[r][c] ? survives[this._live_neighbors(r,c)] : born[this._live_neighbors(r,c)]
         });
         if(buffer.length > this.columns + 2) {
           cell = buffer.shift();
-          grid[cell.row][cell.column] = cell.state;
+          this.grid[cell.row][cell.column] = cell.state;
         }
       }
     }
     while(buffer.length > 0) {
       cell = buffer.shift();
-      grid[cell.row][cell.column] = cell.state;
+      this.grid[cell.row][cell.column] = cell.state;
     }
 
     this._trimGrid();
     this.setState({
-      iteration: ++this.state.iteration
+      iteration: this.state.iteration + 1
     });
   }
 
@@ -81,9 +110,9 @@ export default class GameOfLife extends React.Component {
    * lifecycle methods
    ***************************************************************************/
   componentDidUpdate(prevProps, prevState) {
-    const { grid, magnify } = this.state;
+    const magnify = this.state.magnify;
     const newState = {
-      grid: grid,
+      grid: this.grid,
       magnify: magnify,
       xleft: this.xleft,
       ytop: this.ytop,
@@ -102,7 +131,7 @@ export default class GameOfLife extends React.Component {
    * private methods
    ***************************************************************************/
   _expandGrid() {
-    const { born, grid } = this.state;
+    const born = this.state.born;
     var c, r, min = born.indexOf(1);
     if(min < 0) {
       return;         // this pattern just dies
@@ -122,13 +151,13 @@ export default class GameOfLife extends React.Component {
       // this for statement just checks the first column in the grid and the last
       for(c = 0; c < this.columns; c += this.columns - 1) {
         for(r = 1; r < this.rows - 1; ++r) {
-          if(grid[r - 1][c] + grid[r][c] + grid[r + 1][c] >= min) {
+          if(this.grid[r - 1][c] + this.grid[r][c] + this.grid[r + 1][c] >= min) {
             for(r = 0; r < this.rows; ++r) {
               if(c == 0) {
-                grid[r].unshift(0);
+                this.grid[r].unshift(0);
               }
               else {
-                grid[r].push(0);
+                this.grid[r].push(0);
               }
             }
             if(c == 0) {
@@ -142,18 +171,18 @@ export default class GameOfLife extends React.Component {
     if(this.columns >= min) {
       for(r = 0; r < this.rows; r += this.rows - 1) {
         for(c = 1; c < this.columns - 1; ++c) {
-          if(grid[r][c - 1] + grid[r][c] + grid[r][c + 1] >= min) {
+          if(this.grid[r][c - 1] + this.grid[r][c] + this.grid[r][c + 1] >= min) {
             var n = Array();
             for(c = 0; c < this.columns; ++c) {
               n[c] = 0;
             }
 
             if(r == 0) {
-              grid.unshift(n);
+              this.grid.unshift(n);
               --this.ytop;
             }
             else {
-              grid.push(n);
+              this.grid.push(n);
             }
             break;
           }
@@ -163,23 +192,21 @@ export default class GameOfLife extends React.Component {
   }
 
   _trimGrid() {
-    const grid = this.state.grid;
-
     function _isFalse(val) { return !val; }
 
-    if(grid[0].every(_isFalse)) {
-      grid.shift();
+    if(this.grid[0].every(_isFalse)) {
+      this.grid.shift();
      --this.ytop;
     }
-    if(grid[grid.length - 1].every(_isFalse)) {
-      grid.pop();
+    if(this.grid[this.grid.length - 1].every(_isFalse)) {
+      this.grid.pop();
     }
-    if(grid.map(function(val, i, arr) { return val[0]; }).every(_isFalse)) {
-      grid.forEach(function(val, i, arr) { val.shift(); });
+    if(this.grid.map(function(val, i, arr) { return val[0]; }).every(_isFalse)) {
+      this.grid.forEach(function(val, i, arr) { val.shift(); });
      --this.xleft;
     }
-    if(grid.map(function(val, i, arr) { return val[val.length - 1]; }).every(_isFalse)) {
-      grid.forEach(function(val, i, arr) { val.pop(); });
+    if(this.grid.map(function(val, i, arr) { return val[val.length - 1]; }).every(_isFalse)) {
+      this.grid.forEach(function(val, i, arr) { val.pop(); });
     }
   };
 
@@ -196,7 +223,7 @@ export default class GameOfLife extends React.Component {
         if(column + delta_c < 0 || column + delta_c >= columns || (delta_r == 0 && delta_c == 0)) {
           continue;
         }
-      live_neighbors += this.state.grid[row + delta_r][column + delta_c];
+      live_neighbors += this.grid[row + delta_r][column + delta_c];
       }
     }
     return live_neighbors;
@@ -216,35 +243,14 @@ export default class GameOfLife extends React.Component {
 
   handleLoadBtnClick(evt) {
     const rle = this.rleInput.value();
-    if (rle == this.state.rle) {
-      this.next();
-    }
-    else {
-      try {
-        const { grid, born, survives } = this.rleInput.parse();
-        this.setState({
-          rle: rle,
-          grid: grid,
-          born: born,
-          survives: survives,
-          isLoaded: true,
-          iteration: 0,
-        });
-
-        this.xleft = -Math.floor(grid[0].length / 2);
-        this.ytop =  -Math.floor(grid.length / 2);
-      }
-      catch(e) {
-        console.log(e);
-      }
-    }
+    rle == this.state.rle ? this.next() : this._initialize(rle);
   }
 
   render() {
     return (
       <div>
         <Canvas ref={(component) => this.canvas = component} />
-        <RunLengthEncodingTextarea ref={(component) => this.rleInput = component} />
+        <RunLengthEncodingTextarea ref={(component) => this._rleInput = component} />
         <MagnifySelect onchange={(e) => this.handleMagnifySelectChange(e)} />
         <SpeedSlider value={this.props.init_speed} />
         <Button
