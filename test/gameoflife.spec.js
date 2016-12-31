@@ -14,8 +14,51 @@ import MagnifySelect from '../magnify-select.jsx';
 import RunLengthEncodingTextarea from '../run-length-encoding-textarea.jsx';
 import Canvas from '../canvas.jsx';
 
-describe('<GameOfLife>', function() {
+const cow = {
+  rle: fs.readFileSync('patterns/cow.rle', 'utf8'),
+  grid: [
+    [1,1,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,0,0,0],
+    [1,1,0,0,0,0,1,0,1,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,0,1,1],
+    [0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1],
+    [0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+    [0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+    [1,1,0,0,0,0,1,0,1,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0],
+    [1,1,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,0,0,0]
+  ],
+  born: [0,0,0,1,0,0,0,0,0],
+  survives: [0,0,1,1,0,0,0,0,0]
+};
+const glider = {
+  rle: fs.readFileSync('patterns/glider.rle', 'utf8'),
+  grid: [
+    [0,1,0],
+    [0,0,1],
+    [1,1,1]
+  ],
+  born: [0,0,0,1,0,0,0,0,0],
+  survives: [0,0,1,1,0,0,0,0,0]
+};
+const pufferfish = {
+  rle: fs.readFileSync('patterns/pufferfish.rle', 'utf8'),
+  grid: [
+    [0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+    [0,0,1,1,1,0,0,0,0,0,1,1,1,0,0],
+    [0,1,1,0,0,1,0,0,0,1,0,0,1,1,0],
+    [0,0,0,1,1,1,0,0,0,1,1,1,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,1,0,0,0,0,0,1,0,0,0,0],
+    [0,0,1,0,0,1,0,0,0,1,0,0,1,0,0],
+    [1,0,0,0,0,0,1,0,1,0,0,0,0,0,1],
+    [1,1,0,0,0,0,1,0,1,0,0,0,0,1,1],
+    [0,0,0,0,0,0,1,0,1,0,0,0,0,0,0],
+    [0,0,0,1,0,1,0,0,0,1,0,1,0,0,0],
+    [0,0,0,0,1,0,0,0,0,0,1,0,0,0,0]
+  ],
+  born: [0,0,0,1,0,0,0,0,0],
+  survives: [0,0,1,1,0,0,0,0,0]
+};
 
+describe('<GameOfLife>', function() {
   describe('#render', function() {
     it('renders', function() {
       const wrapper = shallow(<GameOfLife />);
@@ -25,7 +68,8 @@ describe('<GameOfLife>', function() {
 
   describe('#next', function() {
     let wrapper, inst;
-    let rle;
+
+    const { rle, grid, born, survives } = glider;
 
     const glider_states = [
       { grid: [[0, 1, 0], [0, 0, 1], [1, 1, 1]], xleft: -1, ytop: -1 },
@@ -34,10 +78,6 @@ describe('<GameOfLife>', function() {
       { grid: [[1, 0, 0], [0, 1, 1], [1, 1, 0]], xleft: -2, ytop: -2 },
       { grid: [[0, 1, 0], [0, 0, 1], [1, 1, 1]], xleft: -2, ytop: -2 },
     ]
-
-    before(function() {
-      rle = fs.readFileSync('patterns/glider.rle', 'utf8');
-    });
 
     beforeEach(function() {
       wrapper = mount(<GameOfLife />);
@@ -65,15 +105,20 @@ describe('<GameOfLife>', function() {
       }
     });
 
-    // it('re-draws the next generation', function() {
-    //   let canvas = wrapper.find(Canvas);
-    //   let spy = sinon.spy(canvas, 'draw');
-    // });
+    it('re-draws the next generation', function() {
+      let canvas = wrapper.find(Canvas).get(0);
+      let spy = sinon.spy(canvas, 'draw');
+
+      inst.next();
+      expect(spy.called).to.be.true;
+    });
   });
 
   describe('#handleLoadBtnClick', function() {
     let wrapper, loadBtn, runBtn, canvas;
     let inst;
+
+    const { rle, grid, born, survives } = cow;
 
     beforeEach(function() {
       wrapper = mount(<GameOfLife />);
@@ -85,30 +130,6 @@ describe('<GameOfLife>', function() {
     });
 
     describe('not loaded and initialized', function() {
-      let rle, grid, born, survives;
-
-      before(function() {
-        rle = fs.readFileSync('patterns/cow.rle', 'utf8');
-        grid = [
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-          ];
-        born = [0, 0, 0, 0, 1, 1, 1, 1, 0];
-        survives = [1, 1, 1, 1, 0, 0, 0, 0, 1];
-      });
-
       beforeEach(function() {
         sinon.stub(inst.rleInput, 'value').returns(rle);
         sinon.stub(inst.rleInput, 'parse').returns({ grid, born, survives });
@@ -152,26 +173,16 @@ describe('<GameOfLife>', function() {
     });
 
     describe('loaded and initialized', function() {
-      let rle, cow;
-
-      before(function() {
-        rle = fs.readFileSync('patterns/cow.rle', 'utf8');
-        cow = RunLengthEncodingTextarea._doParse(rle);
-      });
-
       beforeEach(function() {
         sinon.stub(inst.rleInput, 'value').returns(rle);
-        wrapper.setState({
-          born: cow.born,
-          survives: cow.survives,
-          rle: rle,
-          isLoaded: true,
-          iteration: 0,
-        });
 
         wrapper.instance()._grid = cow.grid;
         wrapper.instance().xleft = -Math.floor(cow.grid[0].length / 2);
         wrapper.instance().ytop = -Math.floor(cow.grid.length / 2);
+        wrapper.setState(Object.assign(cow, {
+          isLoaded: true,
+          iteration: 0
+        }));
       });
 
       it('generates the next iteration of the pattern', function() {
@@ -184,6 +195,74 @@ describe('<GameOfLife>', function() {
       });
     });
   });
+
+  describe('#handleRunBtnClick', function() {
+    let wrapper, runBtn;
+    let inst;
+    let clock;
+
+    const { rle, grid, born, survives } = cow;
+
+    before(function() {
+      this.clock = sinon.useFakeTimers();
+    });
+
+    beforeEach(function() {
+      wrapper = mount(<GameOfLife />);
+      runBtn = wrapper.find(Button).at(1);
+
+      inst = wrapper.instance();
+
+      sinon.stub(inst.rleInput, 'value').returns(rle);
+
+      inst._grid = cow.grid;
+      inst.xleft = -Math.floor(cow.grid[0].length / 2);
+      inst.ytop = -Math.floor(cow.grid.length / 2);
+      wrapper.setState({
+        rle: cow.rle,
+        born: cow.born,
+        survives: cow.survives,
+        isLoaded: true,
+        iteration: 0
+      });
+    });
+
+    after(function() {
+      this.clock.restore();
+    });
+
+    describe.skip('running', function() {
+      it('pauses the game', function() {
+
+      });
+
+      it('changes the button label to "run"', function() {
+
+      });
+    });
+
+    describe('paused', function() {
+      it('starts the game', function() {
+        assert.isFalse(runBtn.props().disabled);
+
+        let spy = sinon.spy(wrapper.instance(), 'next');
+        runBtn.simulate('click');
+
+        expect(wrapper.state().isRunning).to.be.true;
+        expect(wrapper.state().timeoutId).to.not.be.null;
+
+        this.clock.tick(wrapper.state().speed);
+        expect(spy.called).to.be.true;
+      });
+
+      it('changes the button label to "pause"', function() {
+        assert.equal(runBtn.props().label, 'run');
+
+        runBtn.simulate('click');
+        expect(runBtn.props().label).to.eq('pause');
+      });
+    });
+  })
 
   describe('#handleMagnifySelectChange', function() {
     let wrapper, select, canvas, stub;

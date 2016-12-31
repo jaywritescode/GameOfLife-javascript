@@ -16,6 +16,9 @@ export default class GameOfLife extends React.Component {
       isLoaded: false,
       iteration: -1,
       magnify: 1,
+      speed: 600,
+      isRunning: false,
+      timeoutId: null
     };
 
     this.handleLoadBtnClick.bind(this);
@@ -232,6 +235,29 @@ export default class GameOfLife extends React.Component {
   /****************************************************************************
    * event handlers
    ***************************************************************************/
+  handleLoadBtnClick(evt) {
+    const rle = this.rleInput.value();
+    rle == this.state.rle ? this.next() : this._initialize(rle);
+  }
+
+  handleRunBtnClick(evt) {
+    const { isRunning, speed, timeoutId } = this.state;
+
+    if (isRunning) {
+      clearTimeout(this.state.timeoutId);
+      this.setState({
+        isRunning: false,
+        timeoutId: null
+      });
+    }
+    else {
+      this.setState({
+        isRunning: true,
+        timeoutId: setTimeout(this.next.bind(this), speed)
+      });
+    }
+  }
+
   handleMagnifySelectChange(evt) {
     const magnify = +evt.target.value;
     if ([1, 2, 4, 5, 8].indexOf(magnify) > -1) {
@@ -239,11 +265,6 @@ export default class GameOfLife extends React.Component {
         magnify: magnify
       });
     }
-  }
-
-  handleLoadBtnClick(evt) {
-    const rle = this.rleInput.value();
-    rle == this.state.rle ? this.next() : this._initialize(rle);
   }
 
   render() {
@@ -254,10 +275,12 @@ export default class GameOfLife extends React.Component {
         <MagnifySelect onchange={(e) => this.handleMagnifySelectChange(e)} />
         <SpeedSlider value={this.props.init_speed} />
         <Button
-          className='.loadBtn'
           label={this.state.isLoaded ? 'next' : 'generate'}
           onClick={(e) => this.handleLoadBtnClick(e)} />
-        <Button label="run" disabled={!this.state.isLoaded} />
+        <Button
+          label={this.state.isRunning ? "pause" : "run"}
+          onClick={(e) => this.handleRunBtnClick(e)}
+          disabled={!this.state.isLoaded} />
       </div>
     );
   }
