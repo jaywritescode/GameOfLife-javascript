@@ -244,7 +244,7 @@ export default class GameOfLife extends React.Component {
     const { isRunning, speed, timeoutId } = this.state;
 
     if (isRunning) {
-      clearTimeout(this.state.timeoutId);
+      clearInterval(this.state.timeoutId);
       this.setState({
         isRunning: false,
         timeoutId: null
@@ -253,7 +253,7 @@ export default class GameOfLife extends React.Component {
     else {
       this.setState({
         isRunning: true,
-        timeoutId: setTimeout(this.next.bind(this), speed)
+        timeoutId: setInterval(this.next.bind(this), speed)
       });
     }
   }
