@@ -9,7 +9,7 @@ import SpeedSlider from '../speed-slider.jsx';
 describe('<SpeedSlider>', function() {
   describe('#render', function() {
     it('renders', function() {
-      const wrapper = shallow(<SpeedSlider />);
+      const wrapper = shallow(<SpeedSlider onchange={() => null} />);
       expect(wrapper.find(SpeedSlider)).to.be.ok;
     });
   });

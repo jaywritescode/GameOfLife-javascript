@@ -269,13 +269,19 @@ export default class GameOfLife extends React.Component {
     }
   }
 
+  handleSpeedSliderChange(value) {
+    this.setState({
+      speed: value
+    });
+  }
+
   render() {
     return (
       <div>
         <Canvas ref={(component) => this.canvas = component} />
         <RunLengthEncodingTextarea ref={(component) => this._rleInput = component} />
         <MagnifySelect onchange={(e) => this.handleMagnifySelectChange(e)} />
-        <SpeedSlider value={this.props.init_speed} />
+        <SpeedSlider onchange={this.handleSpeedSliderChange.bind(this)} />
         <Button label={this.state.isLoaded ? 'next' : 'generate'}
                 onClick={(e) => this.handleLoadBtnClick(e)}
                 flat />

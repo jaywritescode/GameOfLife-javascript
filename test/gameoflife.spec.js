@@ -13,6 +13,7 @@ import GameOfLife from '../gameoflife.jsx';
 import MagnifySelect from '../magnify-select.jsx';
 import RunLengthEncodingTextarea from '../run-length-encoding-textarea.jsx';
 import Canvas from '../canvas.jsx';
+import SpeedSlider from '../speed-slider.jsx';
 
 const cow = {
   rle: fs.readFileSync('patterns/cow.rle', 'utf8'),
@@ -288,6 +289,19 @@ describe('<GameOfLife>', function() {
 
       wrapper.setState(nextState);
       expect(stub.calledWith(sinon.match(nextState))).to.be.true;
+    });
+  });
+
+  describe.skip('#handleSpeedSliderChange', function() {
+    let wrapper, slider;
+
+    beforeEach(function() {
+      wrapper = mount(<GameOfLife />);
+      slider = wrapper.find('SpeedSlider').at(0);
+    });
+
+    it('updates the game speed', function() {
+
     });
   });
 });
