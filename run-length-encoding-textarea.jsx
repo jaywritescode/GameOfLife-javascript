@@ -1,4 +1,5 @@
 import React from 'react';
+import { Input } from 'react-toolbox/lib/input';
 
 const F = 0, T = 1;
 
@@ -9,6 +10,9 @@ const numberRegex = /[1-9]\d*/,
 export default class RunLengthEncodingTextarea extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      rle: ''
+    };
   }
 
   parse() {
@@ -128,22 +132,22 @@ export default class RunLengthEncodingTextarea extends React.Component {
   }
 
   value() {
-    return this.textInput.value = this.textInput.value.trim();
+    return this.state.rle;
+  }
+
+  handleChange(value) {
+    this.setState({
+      rle: value.trim()
+    });
   }
 
   render() {
     return (
-      <textarea id="rle" ref={(component) => this.textInput = component} {...this.props} />
+      <Input ref={(component) => this.textInput = component}
+             hint="Enter run length encoded seed pattern here."
+             value={this.state.rle}
+             onChange={this.handleChange.bind(this)}
+             multiline={true} />
     );
   }
 }
-
-RunLengthEncodingTextarea.defaultProps = {
-  placeholder: 'Enter run-length encoded seed pattern here.',
-  cols: 70
-};
-
-RunLengthEncodingTextarea.propTypes = {
-  placeholder: React.PropTypes.string,
-  cols: React.PropTypes.number
-};
