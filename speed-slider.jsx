@@ -8,3 +8,11 @@ export default class SpeedSlider extends React.Component {
     );
   }
 }
+
+SpeedSlider.propTypes = {
+  value: React.PropTypes.number
+};
+
+SpeedSlider.defaultProps = {
+  value: 600
+};

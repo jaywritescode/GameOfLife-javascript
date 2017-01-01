@@ -274,13 +274,12 @@ export default class GameOfLife extends React.Component {
         <RunLengthEncodingTextarea ref={(component) => this._rleInput = component} />
         <MagnifySelect onchange={(e) => this.handleMagnifySelectChange(e)} />
         <SpeedSlider value={this.props.init_speed} />
-        <Button
-          label={this.state.isLoaded ? 'next' : 'generate'}
-          onClick={(e) => this.handleLoadBtnClick(e)} />
-        <Button
-          label={this.state.isRunning ? "pause" : "run"}
-          onClick={(e) => this.handleRunBtnClick(e)}
-          disabled={!this.state.isLoaded} />
+        <Button label={this.state.isLoaded ? 'next' : 'generate'}
+                onClick={(e) => this.handleLoadBtnClick(e)}
+                flat />
+        <Button label={this.state.isRunning ? "pause" : "run"}
+                onClick={(e) => this.handleRunBtnClick(e)}
+                disabled={!this.state.isLoaded} />
       </div>
     );
   }
