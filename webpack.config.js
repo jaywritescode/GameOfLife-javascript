@@ -6,6 +6,13 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js'
   },
+  modulesDirectories: [
+    'node_modules',
+    `${process.cwd()}/node_modules`
+  ],
+  resolve: {
+    extensions: ['', '.js', '.jsx', '.scss']
+  },
   module: {
     loaders: [
       {
@@ -14,10 +21,13 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.s(a|c)ss$/,
-        loaders: ['style-loader', 'css-loader', 'sass-loader']
+        test: /\.s?css$/,
+        loaders: ['style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]', 'sass-loader']
       }
     ]
+  },
+  sassLoader: {
+    sourceMap: true
   },
   devtool: '#source-map',
 };

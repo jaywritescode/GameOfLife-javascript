@@ -1,3 +1,5 @@
+import 'react-toolbox/lib/commons.scss';
+
 import React from 'react';
 import { Button } from 'react-toolbox/lib/button';
 
