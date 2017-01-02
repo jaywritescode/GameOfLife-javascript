@@ -1,6 +1,8 @@
 import React from 'react';
 import { Input } from 'react-toolbox/lib/input';
 
+import theme from './run-length-encoding-textarea.scss';
+
 const F = 0, T = 1;
 
 const invalidRleMessage = "Invalid run-length encoding. Can't create seed pattern.";
@@ -10,6 +12,7 @@ const numberRegex = /[1-9]\d*/,
 export default class RunLengthEncodingTextarea extends React.Component {
   constructor(props) {
     super(props);
+    console.log(theme);
     this.state = {
       rle: ''
     };
@@ -144,6 +147,8 @@ export default class RunLengthEncodingTextarea extends React.Component {
   render() {
     return (
       <Input ref={(component) => this.textInput = component}
+             theme={theme}
+             rows={4}
              hint="Enter run length encoded seed pattern here."
              value={this.state.rle}
              onChange={this.handleChange.bind(this)}
