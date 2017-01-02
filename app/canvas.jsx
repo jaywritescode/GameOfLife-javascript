@@ -49,7 +49,7 @@ export default class Canvas extends React.Component {
 
   render() {
     return (
-      <canvas id="canvas" {...this.props} />
+      <canvas id="canvas" style={{border: '2px solid black'}} {...this.props} />
     );
   }
 }
