@@ -260,11 +260,10 @@ export default class GameOfLife extends React.Component {
     }
   }
 
-  handleMagnifySelectChange(evt) {
-    const magnify = +evt.target.value;
-    if ([1, 2, 4, 5, 8].indexOf(magnify) > -1) {
+  handleMagnifySelectChange(value) {
+    if ([1, 2, 4, 5, 8].indexOf(value) > -1) {
       this.setState({
-        magnify: magnify
+        magnify: value
       });
     }
   }
