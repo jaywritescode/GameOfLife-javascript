@@ -20,11 +20,14 @@ export default class SpeedSlider extends React.Component {
 
   render() {
     return (
-      <Slider value={this.state.value}
-              onChange={this.handleChange.bind(this)}
-              min={0}
-              max={2000}
-              step={50} />
+      <section>
+        <p style={{fontSize: '1.2rem', lineHeight: '1.6rem', color: 'rgba(0, 0, 0, 0.26)'}}>speed</p>
+        <Slider value={this.state.value}
+                onChange={this.handleChange.bind(this)}
+                min={0}
+                max={2000}
+                step={50} />
+      </section>
     );
   }
 }
