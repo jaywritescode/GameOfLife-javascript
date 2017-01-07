@@ -2,11 +2,14 @@ import 'react-toolbox/lib/commons.scss';
 
 import React from 'react';
 import { Button } from 'react-toolbox/lib/button';
+import { Layout, Panel } from 'react-toolbox/lib/layout';
 
 import Canvas from './canvas.jsx';
 import RunLengthEncodingTextarea from './run-length-encoding-textarea.jsx';
 import MagnifySelect from './magnify-select.jsx';
 import SpeedSlider from './speed-slider.jsx';
+
+import theme from './gameoflife.scss';
 
 export default class GameOfLife extends React.Component {
   constructor(props) {
@@ -276,7 +279,7 @@ export default class GameOfLife extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <Layout theme={theme}>
         <div id="left-column">
           <Canvas ref={(component) => this.canvas = component} />
         </div>
@@ -291,7 +294,7 @@ export default class GameOfLife extends React.Component {
                   onClick={(e) => this.handleRunBtnClick(e)}
                   disabled={!this.state.isLoaded} />
         </div>
-      </div>
+      </Layout>
     );
   }
 }

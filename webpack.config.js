@@ -30,5 +30,5 @@ module.exports = {
     sourceMap: true,
     data: '@import "' + path.resolve(__dirname, 'theme/_theme.scss') + '";'
   },
-  devtool: '#source-map',
+  devtool: 'source-map',
 };
