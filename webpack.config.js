@@ -27,7 +27,8 @@ module.exports = {
     ]
   },
   sassLoader: {
-    sourceMap: true
+    sourceMap: true,
+    data: '@import "' + path.resolve(__dirname, 'theme/_theme.scss') + '";'
   },
   devtool: '#source-map',
 };

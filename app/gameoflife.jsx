@@ -276,17 +276,21 @@ export default class GameOfLife extends React.Component {
 
   render() {
     return (
-      <div>
-        <Canvas ref={(component) => this.canvas = component} />
-        <RunLengthEncodingTextarea ref={(component) => this._rleInput = component} />
-        <MagnifySelect onchange={(e) => this.handleMagnifySelectChange(e)} />
-        <SpeedSlider onchange={this.handleSpeedSliderChange.bind(this)} />
-        <Button label={this.state.isLoaded ? 'next' : 'generate'}
-                onClick={(e) => this.handleLoadBtnClick(e)}
-                flat />
-        <Button label={this.state.isRunning ? "pause" : "run"}
-                onClick={(e) => this.handleRunBtnClick(e)}
-                disabled={!this.state.isLoaded} />
+      <div className="container">
+        <div id="left-column">
+          <Canvas ref={(component) => this.canvas = component} />
+        </div>
+        <div id="right-column">
+          <RunLengthEncodingTextarea ref={(component) => this._rleInput = component} />
+          <MagnifySelect onchange={(e) => this.handleMagnifySelectChange(e)} />
+          <SpeedSlider onchange={this.handleSpeedSliderChange.bind(this)} />
+          <Button label={this.state.isLoaded ? 'next' : 'generate'}
+                  onClick={(e) => this.handleLoadBtnClick(e)}
+                  flat />
+          <Button label={this.state.isRunning ? "pause" : "run"}
+                  onClick={(e) => this.handleRunBtnClick(e)}
+                  disabled={!this.state.isLoaded} />
+        </div>
       </div>
     );
   }
