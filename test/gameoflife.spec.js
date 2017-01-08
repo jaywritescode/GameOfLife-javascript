@@ -68,50 +68,66 @@ describe('<GameOfLife>', function() {
   });
 
   describe('#next', function() {
-    let wrapper, inst;
+    let wrapper, inst, rle;
 
-    const { rle, grid, born, survives } = glider;
-
-    const glider_states = [
-      { grid: [[0, 1, 0], [0, 0, 1], [1, 1, 1]], xleft: -1, ytop: -1 },
-      { grid: [[1, 0, 1], [0, 1, 1], [0, 1, 0]], xleft: -1, ytop: -2 },
-      { grid: [[0, 0, 1], [1, 0, 1], [0, 1, 1]], xleft: -1, ytop: -2 },
-      { grid: [[1, 0, 0], [0, 1, 1], [1, 1, 0]], xleft: -2, ytop: -2 },
-      { grid: [[0, 1, 0], [0, 0, 1], [1, 1, 1]], xleft: -2, ytop: -2 },
-    ]
+    // const { rle, grid, born, survives } = glider;
+    //
+    // const glider_states = [
+    //   { grid: [[0, 1, 0], [0, 0, 1], [1, 1, 1]], xleft: -1, ytop: -1 },
+    //   { grid: [[1, 0, 1], [0, 1, 1], [0, 1, 0]], xleft: -1, ytop: -2 },
+    //   { grid: [[0, 0, 1], [1, 0, 1], [0, 1, 1]], xleft: -1, ytop: -2 },
+    //   { grid: [[1, 0, 0], [0, 1, 1], [1, 1, 0]], xleft: -2, ytop: -2 },
+    //   { grid: [[0, 1, 0], [0, 0, 1], [1, 1, 1]], xleft: -2, ytop: -2 },
+    // ]
 
     beforeEach(function() {
       wrapper = mount(<GameOfLife />);
       inst = wrapper.instance();
 
       sinon.stub(inst.rleInput, 'value').returns(rle);
-
       inst._initialize();
     });
 
-    it('generates the next iteration', function() {
-      assert.deepEqual(glider_states[0].grid, inst.grid);
-      assert.equal(glider_states[0].xleft, inst.xleft);
-      assert.equal(glider_states[0].ytop, inst.ytop);
+    describe('test -> glider', function() {
+      const { grid, born, survives } = glider;
 
-      let newState;
-      for(var i = 1; i < glider_states.length; ++i) {
+      const glider_states = [
+        { grid: [[0, 1, 0], [0, 0, 1], [1, 1, 1]], xleft: -1, ytop: -1 },
+        { grid: [[1, 0, 1], [0, 1, 1], [0, 1, 0]], xleft: -1, ytop: -2 },
+        { grid: [[0, 0, 1], [1, 0, 1], [0, 1, 1]], xleft: -1, ytop: -2 },
+        { grid: [[1, 0, 0], [0, 1, 1], [1, 1, 0]], xleft: -2, ytop: -2 },
+        { grid: [[0, 1, 0], [0, 0, 1], [1, 1, 1]], xleft: -2, ytop: -2 },
+      ];
+
+      before(function() {
+        rle = glider.rle;
+      });
+
+      it('generates the next iteration', function() {
+        assert.deepEqual(glider_states[0].grid, inst.grid);
+        assert.equal(glider_states[0].xleft, inst.xleft);
+        assert.equal(glider_states[0].ytop, inst.ytop);
+
+        let newState;
+        for(var i = 1; i < glider_states.length; ++i) {
+          inst.next();
+
+          newState = wrapper.state();
+          expect(newState.iteration).to.equal(i);
+          expect(inst.grid).to.deep.equal(glider_states[i].grid);
+          expect(inst.xleft).to.equal(glider_states[i].xleft);
+          expect(inst.ytop).to.equal(glider_states[i].ytop);
+        }
+      });
+
+      it('re-draws the next generation', function() {
+        let canvas = wrapper.find(Canvas).get(0);
+        let spy = sinon.spy(canvas, 'draw');
+
         inst.next();
+        expect(spy.called).to.be.true;
+      });
 
-        newState = wrapper.state();
-        expect(newState.iteration).to.equal(i);
-        expect(inst.grid).to.deep.equal(glider_states[i].grid);
-        expect(inst.xleft).to.equal(glider_states[i].xleft);
-        expect(inst.ytop).to.equal(glider_states[i].ytop);
-      }
-    });
-
-    it('re-draws the next generation', function() {
-      let canvas = wrapper.find(Canvas).get(0);
-      let spy = sinon.spy(canvas, 'draw');
-
-      inst.next();
-      expect(spy.called).to.be.true;
     });
   });
 
