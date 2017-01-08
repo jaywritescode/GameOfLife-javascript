@@ -4,7 +4,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
-import SpeedSlider from '../speed-slider.jsx';
+import SpeedSlider from '../app/speed-slider.jsx';
 
 describe('<SpeedSlider>', function() {
   describe('#render', function() {

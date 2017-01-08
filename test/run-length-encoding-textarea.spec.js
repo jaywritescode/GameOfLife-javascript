@@ -6,7 +6,7 @@ import { mount, shallow } from 'enzyme';
 
 var fs = require('fs');
 
-import RunLengthEncodingTextarea from '../run-length-encoding-textarea.jsx';
+import RunLengthEncodingTextarea from '../app/run-length-encoding-textarea.jsx';
 
 describe('<RunLengthEncodingTextarea>', function() {
 

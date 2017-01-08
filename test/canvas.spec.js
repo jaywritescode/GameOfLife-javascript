@@ -4,7 +4,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
-import Canvas from '../canvas.jsx';
+import Canvas from '../app/canvas.jsx';
 
 describe('<Canvas>', function() {
   describe('#render', function() {

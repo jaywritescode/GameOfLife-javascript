@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import MagnifySelect from '../magnify-select.jsx';
+import MagnifySelect from '../app/magnify-select.jsx';
 
 describe('<MagnifySelect>', function() {
   let wrapper, callback;

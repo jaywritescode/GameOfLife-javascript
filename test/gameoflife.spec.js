@@ -9,11 +9,11 @@ import { Button } from 'react-toolbox/lib/button';
 
 var fs = require('fs');
 
-import GameOfLife from '../gameoflife.jsx';
-import MagnifySelect from '../magnify-select.jsx';
-import RunLengthEncodingTextarea from '../run-length-encoding-textarea.jsx';
-import Canvas from '../canvas.jsx';
-import SpeedSlider from '../speed-slider.jsx';
+import GameOfLife from '../app/gameoflife.jsx';
+import MagnifySelect from '../app/magnify-select.jsx';
+import RunLengthEncodingTextarea from '../app/run-length-encoding-textarea.jsx';
+import Canvas from '../app/canvas.jsx';
+import SpeedSlider from '../app/speed-slider.jsx';
 
 const cow = {
   rle: fs.readFileSync('patterns/cow.rle', 'utf8'),
