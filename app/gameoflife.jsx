@@ -289,10 +289,11 @@ export default class GameOfLife extends React.Component {
           <SpeedSlider onchange={this.handleSpeedSliderChange.bind(this)} />
           <Button label={this.state.isLoaded ? 'next' : 'generate'}
                   onClick={(e) => this.handleLoadBtnClick(e)}
-                  flat />
+                  raised />
           <Button label={this.state.isRunning ? "pause" : "run"}
                   onClick={(e) => this.handleRunBtnClick(e)}
-                  disabled={!this.state.isLoaded} />
+                  disabled={!this.state.isLoaded}
+                  raised />
         </div>
       </Layout>
     );

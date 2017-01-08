@@ -1,6 +1,8 @@
 import React from 'react';
 import { Dropdown } from 'react-toolbox/lib/dropdown';
 
+import theme from './magnify-select.scss';
+
 export default class MagnifySelect extends React.Component {
   constructor(props) {
     super(props);
@@ -31,6 +33,7 @@ export default class MagnifySelect extends React.Component {
                 template={this.template}
                 onChange={this.handleChange.bind(this)}
                 onFocus={() => {}}
+                theme={theme}
                 value={this.state.selected} />
     );
   }
