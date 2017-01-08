@@ -38,5 +38,5 @@ SpeedSlider.propTypes = {
 };
 
 SpeedSlider.defaultProps = {
-  initialSpeed: 600
+  initialSpeed: 1400              // actual speed is slider.max - slider.value
 };

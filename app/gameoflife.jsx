@@ -22,7 +22,6 @@ export default class GameOfLife extends React.Component {
       iteration: -1,
       magnify: 1,
       speed: 600,
-      isRunning: false,
       timeoutId: null
     };
 
@@ -82,6 +81,10 @@ export default class GameOfLife extends React.Component {
 
   get rleInput() {
     return this._rleInput;
+  }
+
+  get isRunning() {
+    return this.state.timeoutId != null;
   }
 
   next() {
@@ -246,18 +249,16 @@ export default class GameOfLife extends React.Component {
   }
 
   handleRunBtnClick(evt) {
-    const { isRunning, speed, timeoutId } = this.state;
+    const { speed, timeoutId } = this.state;
 
-    if (isRunning) {
+    if (this.isRunning) {
       clearInterval(this.state.timeoutId);
       this.setState({
-        isRunning: false,
         timeoutId: null
       });
     }
     else {
       this.setState({
-        isRunning: true,
         timeoutId: setInterval(this.next.bind(this), speed)
       });
     }
@@ -272,9 +273,17 @@ export default class GameOfLife extends React.Component {
   }
 
   handleSpeedSliderChange(value) {
-    this.setState({
-      speed: value
-    });
+    const speed = 2000 - value;       // the slider: right = slower, feels unnatural
+    let update = {
+      speed: speed
+    };
+    if (this.isRunning) {
+      clearInterval(this.state.timeoutId);
+      Object.assign(update, {
+        timeoutId: setInterval(this.next.bind(this), speed)
+      });
+    }
+    this.setState(update);
   }
 
   render() {
@@ -290,7 +299,7 @@ export default class GameOfLife extends React.Component {
           <Button label={this.state.isLoaded ? 'next' : 'generate'}
                   onClick={(e) => this.handleLoadBtnClick(e)}
                   raised />
-          <Button label={this.state.isRunning ? "pause" : "run"}
+          <Button label={this.isRunning ? "pause" : "run"}
                   onClick={(e) => this.handleRunBtnClick(e)}
                   disabled={!this.state.isLoaded}
                   raised />
