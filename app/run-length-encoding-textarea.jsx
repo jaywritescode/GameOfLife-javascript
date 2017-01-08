@@ -12,7 +12,6 @@ const numberRegex = /[1-9]\d*/,
 export default class RunLengthEncodingTextarea extends React.Component {
   constructor(props) {
     super(props);
-    console.log(theme);
     this.state = {
       rle: ''
     };
