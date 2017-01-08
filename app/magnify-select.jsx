@@ -21,7 +21,7 @@ export default class MagnifySelect extends React.Component {
     this.setState({
       selected: value
     });
-    this.props.onchange.call(value);
+    this.props.onchange(value);
   }
 
   render() {
