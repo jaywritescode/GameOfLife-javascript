@@ -66,14 +66,26 @@ describe('<RunLengthEncodingTextarea>', function() {
       expect(result).to.have.property('survives').that.deep.equals([0, 0, 1, 1, 0, 0, 0, 0, 0]);
     });
 
-    it('parses the rule string', function() {
-      wrapper.setState({
-        rle: fs.readFileSync('patterns/non_standard_rule_string.rle', 'utf8')
+    describe('parsing the rule string', function() {
+      it('parses the rule string with "b" and "s"', function() {
+        wrapper.setState({
+          rle: fs.readFileSync('patterns/non_standard_rule_string.rle', 'utf8')
+        });
+
+        const result = inst.parse.call(inst);
+        expect(result).to.have.property('born').that.deep.equals([0, 0, 0, 1, 0, 0, 1, 0, 1]);
+        expect(result).to.have.property('survives').that.deep.equals([0, 0, 1, 0, 1, 1, 0, 0, 0]);
       });
 
-      const result = inst.parse.call(inst);
-      expect(result).to.have.property('born').that.deep.equals([0, 0, 0, 1, 0, 0, 1, 0, 1]);
-      expect(result).to.have.property('survives').that.deep.equals([0, 0, 1, 0, 1, 1, 0, 0, 0]);
+      it('parses the rule string without "b" and "s"', function() {
+        wrapper.setState({
+          rle: fs.readFileSync('patterns/cow.rle', 'utf-8')
+        });
+
+        const result = inst.parse.call(inst);
+        expect(result).to.have.property('born').that.deep.equals([0, 0, 0, 1, 0, 0, 0, 0, 0]);
+        expect(result).to.have.property('survives').that.deep.equals([0, 0, 1, 1, 0, 0, 0, 0, 0]);
+      });
     });
 
     it('parses the initial board state', function() {
