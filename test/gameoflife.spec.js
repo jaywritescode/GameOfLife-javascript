@@ -335,7 +335,7 @@ describe('<GameOfLife>', function() {
         let spy = sinon.spy(wrapper.instance(), 'next');
         runBtn.simulate('click');
 
-        expect(wrapper.state().isRunning).to.be.true;
+        expect(wrapper.instance().isRunning).to.be.true;
         expect(wrapper.state().timeoutId).to.not.be.null;
 
         this.clock.tick(wrapper.state().speed);
