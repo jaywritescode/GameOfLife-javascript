@@ -349,7 +349,7 @@ describe('<GameOfLife>', function() {
         expect(runBtn.props().label).to.eq('pause');
       });
     });
-  })
+  });
 
   describe('#handleMagnifySelectChange', function() {
     let wrapper, select, canvas, stub;

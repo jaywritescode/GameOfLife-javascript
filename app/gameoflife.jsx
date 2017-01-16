@@ -219,7 +219,7 @@ export default class GameOfLife extends React.Component {
     if(this.grid.map(function(val, i, arr) { return val[val.length - 1]; }).every(_isFalse)) {
       this.grid.forEach(function(val, i, arr) { val.pop(); });
     }
-  };
+  }
 
   _live_neighbors(row, column) {
     var live_neighbors = 0, delta_r, delta_c;
@@ -234,7 +234,7 @@ export default class GameOfLife extends React.Component {
         if(column + delta_c < 0 || column + delta_c >= columns || (delta_r == 0 && delta_c == 0)) {
           continue;
         }
-      live_neighbors += this.grid[row + delta_r][column + delta_c];
+        live_neighbors += this.grid[row + delta_r][column + delta_c];
       }
     }
     return live_neighbors;

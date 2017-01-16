@@ -41,4 +41,4 @@ export default class MagnifySelect extends React.Component {
 
 MagnifySelect.propTypes = {
   onchange: React.PropTypes.func.isRequired,
-}
+};

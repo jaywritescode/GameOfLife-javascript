@@ -6,12 +6,10 @@ export default class SpeedSlider extends React.Component {
     super(props);
     this.state = {
       value: this.props.initialSpeed
-    }
+    };
   }
 
   handleChange(value) {
-    console.log('handleChange');
-    console.log(value);
     this.setState({
       value: value
     });
