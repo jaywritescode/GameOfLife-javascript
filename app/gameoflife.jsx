@@ -172,7 +172,7 @@ export default class GameOfLife extends React.Component {
               }
             }
             if(c == 0) {
-              this.xleft--;
+              --this.xleft;
             }
             break;
           }
@@ -207,14 +207,14 @@ export default class GameOfLife extends React.Component {
 
     if(this.grid[0].every(_isFalse)) {
       this.grid.shift();
-     --this.ytop;
+      ++this.ytop;
     }
     if(this.grid[this.grid.length - 1].every(_isFalse)) {
       this.grid.pop();
     }
     if(this.grid.map(function(val, i, arr) { return val[0]; }).every(_isFalse)) {
       this.grid.forEach(function(val, i, arr) { val.shift(); });
-     --this.xleft;
+      ++this.xleft;
     }
     if(this.grid.map(function(val, i, arr) { return val[val.length - 1]; }).every(_isFalse)) {
       this.grid.forEach(function(val, i, arr) { val.pop(); });
