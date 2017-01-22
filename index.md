@@ -1,8 +1,13 @@
 ---
 pagetitle: Conway's Game of Life
+include-after: <link rel="stylesheet" href="style/gh-pages.css">
 ---
 
-<link href="style/base.css" type="text/css" rel="stylesheet" />
+<style type="text/css">
+  body {
+    position: relative;
+  }
+</style>
 
 Life
 ====
