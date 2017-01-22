@@ -1,11 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Conway's Game Of Life</title>
-    <link href="style/base.css" type="text/css" rel="stylesheet" />
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Conway's Game of Life</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
-    <div id="main"></main>
-</body>
+<p><link href="style/base.css" type="text/css" rel="stylesheet" /></p>
+<h1 id="life">Life</h1>
+<div id="main">
+
+</div>
+<h1 id="what-is-this">what is this?</h1>
+<p>The game of Life is collecting dust in my basement, ever since the spinner fell apart and the ten-year-old me tore up the promissory notes after losing and living out my days in the Poor Farm one too many times. Conway's Game of Life is way cooler than the Milton-Bradley version, a mesmerizing electronic fishbowl and demonstration of often complex, difficult-to-predict behavior emerging from simple rules. It was also an interview question I got at Google maybe five years ago, and that's why it's on my website today.</p>
+<p>Life lives on an infinite planar grid with cells in one of two states: alive or dead. The game is seeded with an initial pattern of live cells and transition rule; on each iteration of the game, the transition rule is applied to each cell on the grid and the pattern potentially changes. I forgot to mention that there are no players and certainly no winners in Conway's Game of Life, which is a vast improvement of the game I played as a child.</p>
+<p>The transition rule is a function of a cell's current state and the number of live cells in the target cell's <em>Moore neighborhood</em>, its eight horizontally, vertically, and diagonally adjacent cells. The rule has two parts, <span class="math inline">\(B,S \subset \{0,1,2,3,4,5,6,7,8,9\}\)</span>, which operate as follows:</p>
+<p>Let <span class="math inline">\(C_i\)</span> be a cell in in iteration <span class="math inline">\(i\)</span> and let <span class="math inline">\(m\)</span> be the number of live cells in <span class="math inline">\(C\)</span>'s Moore neighborhood. Then:</p>
+<ol type="1">
+<li><p>If <span class="math inline">\(C_i\)</span> is dead and <span class="math inline">\(m \in B\)</span>, then <span class="math inline">\(C_{i+1}\)</span> is alive.</p></li>
+<li><p>Otherwise if <span class="math inline">\(C_i\)</span> is alive and <span class="math inline">\(m \in S\)</span>, then <span class="math inline">\(C_{i+1}\)</span> is alive.</p></li>
+<li><p>Otherwise <span class="math inline">\(C_{i+1}\)</span> is dead.</p></li>
+</ol>
+<h3 id="what-do-i-type-into-that-run-length-encoded-seed-pattern-box">what do i type into that &quot;run length encoded seed pattern&quot; box?</h3>
+<p>I suggest copy and pasting a pattern file from <a href="https://www.google.com/search?q=rle+site:conwaylife.com/patterns&amp;filter=0">here</a>. If you insist on typing in your own patterns and you'll be disappointed if what you type turns out to be invalid, read <a href="http://conwaylife.com/wiki/Run_Length_Encoded">this description</a> of run length encoded serialization.</p>
 <script type="text/javascript" src="build/bundle.js"></script>
+</body>
 </html>

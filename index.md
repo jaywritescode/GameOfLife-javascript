@@ -3,7 +3,6 @@ pagetitle: Conway's Game of Life
 ---
 
 <link href="style/base.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="build/bundle.js"></script>
 
 Life
 ====
@@ -29,3 +28,5 @@ Let $C_i$ be a cell in in iteration $i$ and let $m$ be the number of live cells 
 ### what do i type into that "run length encoded seed pattern" box?
 
 I suggest copy and pasting a pattern file from [here](https://www.google.com/search?q=rle+site:conwaylife.com/patterns&filter=0). If you insist on typing in your own patterns and you'll be disappointed if what you type turns out to be invalid, read [this description](http://conwaylife.com/wiki/Run_Length_Encoded) of run length encoded serialization.
+
+<script type="text/javascript" src="build/bundle.js"></script>

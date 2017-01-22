@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "test": "mocha --require ignore-styles --require jsdom-global/register --compilers js:babel-register",
-    "lint": "eslint . --ext .jsx --ext .js --cache"
+    "lint": "eslint . --ext .jsx --ext .js --cache",
+    "pandoc": "pandoc -f markdown --mathjax -t html5 --standalone -o index.html index.md"
   },
   "repository": {
     "type": "git",
